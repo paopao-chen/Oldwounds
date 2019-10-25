@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.oldwounds.utils.MyViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mRadioGroup" />
+
+    <RadioGroup
+        android:id="@+id/mRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="#dcdcdc"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/home_tab"
+            style="@style/Custom.TabRadioButton"
+            android:checked="true"
+            android:drawableTop="@drawable/tab_home_selector"
+            android:text="@string/home" />
+
+        <RadioButton
+            android:id="@+id/old_tab"
+            style="@style/Custom.TabRadioButton"
+            android:drawableTop="@drawable/tab_old_selector"
+            android:text="@string/old" />
+
+        <RadioButton
+            android:id="@+id/todo_tab"
+            style="@style/Custom.TabRadioButton"
+            android:drawableTop="@drawable/tab_todo_selector"
+            android:text="@string/todo" />
+
+        <RadioButton
+            android:id="@+id/mine_tab"
+            style="@style/Custom.TabRadioButton"
+            android:drawableTop="@drawable/tab_mine_selector"
+            android:text="@string/mine" />
+    </RadioGroup>
+
+</RelativeLayout>

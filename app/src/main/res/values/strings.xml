@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">旧痕</string>
+    <string name="home">主页</string>
+    <string name="old">旧痕</string>
+    <string name="todo">目标</string>
+    <string name="mine">个人</string>
+</resources>
