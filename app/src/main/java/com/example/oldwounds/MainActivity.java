@@ -9,6 +9,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.YuvImage;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.RadioButton;
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         //初始化fragment
         fragments = new ArrayList<>(4);
         fragments.add(HomeFragment.getInstance());
-        fragments.add(OldFragment.getInstance());
         fragments.add(TodoFragment.getInstance());
+        fragments.add(OldFragment.getInstance());
         fragments.add(MineFragment.getInstance());
         //设置适配器
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),fragments);
@@ -124,9 +125,24 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 hasPermission = true;
             } else {
-                Toast.makeText(this, "权限授予失败！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "必须同意所有权限才能使用本程序！", Toast.LENGTH_SHORT).show();
                 hasPermission = false;
+                finish();
             }
         }
+    }
+
+    private static final int TIME_EXIT = 2000;
+    private long mExitTime;
+
+    @Override
+    public void onBackPressed() {
+        if (mExitTime + TIME_EXIT > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this,R.string.EXIT_TIME,Toast.LENGTH_SHORT).show();
+            mExitTime = System.currentTimeMillis();
+        }
+
     }
 }

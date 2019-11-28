@@ -4,4 +4,5 @@
     <string name="old">旧痕</string>
     <string name="todo">目标</string>
     <string name="mine">个人</string>
+    <string name="EXIT_TIME">再点击退出旧痕</string>
 </resources>

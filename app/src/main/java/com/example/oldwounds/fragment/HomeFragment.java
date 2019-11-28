@@ -39,7 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class HomeFragment extends Fragment implements DatePickerDialog.OnDateSetListener,Toolbar.OnMenuItemClickListener {
 
     private static HomeFragment homeFragment;
-    private HomeFragment(){}
+    public HomeFragment(){}
 
     public static Fragment getInstance(){
         if (homeFragment == null)
@@ -49,11 +49,11 @@ public class HomeFragment extends Fragment implements DatePickerDialog.OnDateSet
 
 
     private Toolbar home_toolbar;
-    //Recycle相关
+    //RecycleView相关
     private RecyclerView mRecyclerView;
     private UseTimeAdapter mUseTimeAdapter;
 
-    private ArrayList<String> mDateList;
+//    private ArrayList<String> mDateList;
     private UseTimeDataManager mUseTimeDataManager;
     private int dayNum = 0;
 
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment implements DatePickerDialog.OnDateSet
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void initData(int dayNum) {
-        mDateList = DateTransUtils.getSearchDays();
+//        mDateList = DateTransUtils.getSearchDays();
         mUseTimeDataManager = UseTimeDataManager.getInstance(getContext());
         mUseTimeDataManager.refreshData(dayNum);
     }

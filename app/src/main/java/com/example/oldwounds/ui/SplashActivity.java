@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_splash);   //照片要一个大的，或者自己写一个view
         handler.sendEmptyMessageDelayed(TOMAIN,2000L);
     }
 

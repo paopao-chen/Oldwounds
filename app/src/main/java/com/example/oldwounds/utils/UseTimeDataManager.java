@@ -245,6 +245,7 @@ public class UseTimeDataManager {
                 }
             }
         }
+//        quickSort(mUsedInfoList,0,mUsedInfoList.size());
         return mUsedInfoList;
     }
 

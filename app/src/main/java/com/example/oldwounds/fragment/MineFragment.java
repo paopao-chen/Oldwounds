@@ -57,7 +57,7 @@ import static android.app.Activity.RESULT_OK;
 public class MineFragment extends Fragment implements View.OnClickListener {
 
     private static MineFragment mineFragment;
-    private MineFragment(){}
+    public MineFragment(){}
 
     public static Fragment getInstance(){
         if (mineFragment == null)

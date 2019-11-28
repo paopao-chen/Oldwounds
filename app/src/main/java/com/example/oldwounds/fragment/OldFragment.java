@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
  */
 public class OldFragment extends Fragment {
     private static OldFragment oldFragment;
-    private OldFragment(){}
+    public OldFragment(){}
 
     public static Fragment getInstance(){
         if (oldFragment == null)
