@@ -12,6 +12,9 @@ import android.widget.EditText;
 import com.example.oldwounds.R;
 import com.example.oldwounds.utils.TimeCount;
 
+/**
+ * 忘记密码就直接去数据库里修改一个密码即可
+ */
 public class ForgetActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText et_phone;

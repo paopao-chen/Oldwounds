@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.oldwounds.MainActivity;
@@ -52,9 +53,19 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);   //照片要一个大的，或者自己写一个view
+        hideBootomUIMeun();
         handler.sendEmptyMessageDelayed(TOMAIN,2000L);
     }
 
+    /**
+     * 隐藏底部的虚拟键盘
+     */
+    private void hideBootomUIMeun(){
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
     //禁止返回
     @Override
     public void onBackPressed() {

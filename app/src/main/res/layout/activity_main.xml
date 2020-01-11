@@ -27,16 +27,16 @@
             android:text="@string/home" />
 
         <RadioButton
-            android:id="@+id/todo_tab"
-            style="@style/Custom.TabRadioButton"
-            android:drawableTop="@drawable/tab_todo_selector"
-            android:text="@string/todo" />
-
-        <RadioButton
             android:id="@+id/old_tab"
             style="@style/Custom.TabRadioButton"
             android:drawableTop="@drawable/tab_old_selector"
             android:text="@string/old" />
+
+        <RadioButton
+            android:id="@+id/todo_tab"
+            style="@style/Custom.TabRadioButton"
+            android:drawableTop="@drawable/tab_todo_selector"
+            android:text="@string/todo" />
 
         <RadioButton
             android:id="@+id/mine_tab"

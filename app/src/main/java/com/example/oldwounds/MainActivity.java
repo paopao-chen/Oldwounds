@@ -9,7 +9,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.YuvImage;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.RadioButton;
@@ -17,9 +16,9 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.oldwounds.adapter.MyFragmentPagerAdapter;
-import com.example.oldwounds.fragment.HomeFragment;
-import com.example.oldwounds.fragment.MineFragment;
 import com.example.oldwounds.fragment.OldFragment;
+import com.example.oldwounds.fragment.MineFragment;
+import com.example.oldwounds.fragment.HomeFragment;
 import com.example.oldwounds.fragment.TodoFragment;
 import com.example.oldwounds.utils.MyViewPager;
 
@@ -48,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         //初始化fragment
         fragments = new ArrayList<>(4);
         fragments.add(HomeFragment.getInstance());
-        fragments.add(TodoFragment.getInstance());
         fragments.add(OldFragment.getInstance());
+        fragments.add(TodoFragment.getInstance());
         fragments.add(MineFragment.getInstance());
         //设置适配器
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),fragments);

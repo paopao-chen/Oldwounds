@@ -1,5 +1,6 @@
 package com.example.oldwounds.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.usage.UsageStats;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -47,11 +48,16 @@ public class UseTimeAdapter extends RecyclerView.Adapter<UseTimeAdapter.ViewHold
         return viewHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UsedInfo info = mUsedInfoList.get(position);
-        holder.tv_index.setText(position + 1 + "");
+        if (position < 9) {
+            holder.tv_index.setText("0" + (position + 1));
+        } else {
+            holder.tv_index.setText(position + 1 + "");
+        }
         final String name = info.getmPackageName();
         try {
             holder.iv_app_icon.setImageDrawable(packageManager.getApplicationIcon(name));
@@ -123,7 +129,7 @@ public class UseTimeAdapter extends RecyclerView.Adapter<UseTimeAdapter.ViewHold
     /**
      * 使用的次数
      * @param pkg
-     * @return
+     * @return stats
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private long getTotalTimeFromUsage(String pkg) {

@@ -43,13 +43,13 @@ public class AddTodoActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.btn_add:
                 if (et_content.toString().trim().equals("")){
-                    et_content.setError("Please enter a Todo");
+                    et_content.setError("您的输入为空");
                 } else {
                     content = et_content.getText().toString();
                     todo.setContent(content);
                     todo.setCheck(false);
                     Intent intent = new Intent();
-                    intent.putExtra(StaticData.TODOITEM,todo);
+                    intent.putExtra(StaticData.TODOITEM, todo);
                     setResult(RESULT_OK,intent);
                     //(这里出过bug)fragment的继承类不要去实现带参的构造函数，因为这些带参构造函数在fragment被再次实例化的时候将不会被调用
                     finish();

@@ -1,10 +1,13 @@
 package com.example.oldwounds.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ import com.example.oldwounds.utils.DateTransUtils;
 import com.example.oldwounds.utils.LogUtil;
 import com.example.oldwounds.utils.StaticData;
 import com.example.oldwounds.utils.TodoDataUtil;
+import com.example.oldwounds.view.EmptyRecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
@@ -48,7 +53,8 @@ import static android.app.Activity.RESULT_CANCELED;
  * Create by Politness Chen on 2019/10/16--14:04
  * desc:   目标Fragment
  */
-public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener, View.OnClickListener {
+public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickListener,
+        DatePickerDialog.OnDateSetListener, View.OnClickListener {
     private static TodoFragment todoFragment;
     public TodoFragment(){}
 
@@ -59,11 +65,12 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     }
 
     private Toolbar todo_toolbar;
-    private RecyclerView rv_todo;
+    private EmptyRecyclerView rv_todo;
     private FloatingActionButton fab_add_task;
     private ArrayList<Todo> todoList;
     private TodoAdapter adapter;
     private TodoDataUtil todoDataUtil;
+    private LinearLayout ll_empty;
 
     private static final String FILENAME = "todo.json";
 
@@ -92,23 +99,24 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         todo_toolbar.setTitleMarginStart(50);
         todo_toolbar.setTitleTextColor(R.color.colorAccent);
 
-        //RecyclerView的初始化
-        rv_todo = view.findViewById(R.id.rv_todo);
-        rv_todo.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         //添加目标的悬浮按钮
         fab_add_task = view.findViewById(R.id.fab_add_task);
         fab_add_task.setOnClickListener(this);
 
+        ll_empty = view.findViewById(R.id.ll_empty);
+
         //filename前面加上日期   2019-10-28
-        todoDataUtil = new TodoDataUtil(FILENAME,getContext());
+        todoDataUtil = new TodoDataUtil(FILENAME, getContext());
         todoList = getLocallyStoredData(todoDataUtil);
         adapter = new TodoAdapter(todoList);
+        //RecyclerView的初始化
+        rv_todo = view.findViewById(R.id.rv_todo);
+        rv_todo.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_todo.setAdapter(adapter);
+        rv_todo.setEmptyView(ll_empty);
     }
 
-
-    public static ArrayList<Todo> getLocallyStoredData(TodoDataUtil todoDataUtil) {
+    private ArrayList<Todo> getLocallyStoredData(TodoDataUtil todoDataUtil) {
         ArrayList<Todo> items = null;
 
         try {
@@ -148,9 +156,9 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
 
             for (int i = 0; i < todoList.size(); i++) {
                 if (todo.getIdentifier().equals(todoList.get(i).getIdentifier())) {
-                    todoList.set(i,todo);
+                    todoList.set(i, todo);
                     existed = true;
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();  //刷新
                     break;
                 }
             }
@@ -185,8 +193,10 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
                     LogUtil.e("TodoFragment", String.valueOf(isCheck));
                     if (isCheck) {
                         viewHolder.cb_todo.setChecked(false);
+                        viewHolder.tv_content.setTextColor(Color.GRAY);
                     } else {
                         viewHolder.cb_todo.setChecked(true);
+                        viewHolder.tv_content.setTextColor(Color.GREEN);
                     }
                     todo.setCheck(!isCheck);
                     LogUtil.e("TodoFragment", String.valueOf(todo.isCheck()));
@@ -197,9 +207,17 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
                 @Override
                 public void onClick(View v) {
                     Todo todo = mList.get(viewHolder.getAdapterPosition());
-                    Intent intent =new Intent(getContext(),AddTodoActivity.class);
-                    intent.putExtra(StaticData.TODOITEM,todo);
+                    Intent intent =new Intent(getContext(), AddTodoActivity.class);
+                    intent.putExtra(StaticData.TODOITEM, todo);
                     startActivityForResult(intent,StaticData.REQUEST_ID_TODO_ITEM);
+                }
+            });
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    todoList.remove(viewHolder.getAdapterPosition());
+                    adapter.notifyDataSetChanged();
+                    return true;   //true的话就不会向下传递事件给onClick
                 }
             });
             return viewHolder;

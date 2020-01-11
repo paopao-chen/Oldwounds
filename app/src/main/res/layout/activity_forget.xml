@@ -24,6 +24,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:inputType="phone"
+            android:background="@drawable/text_bg"
             android:hint="请输入您的手机号"/>
     </LinearLayout>
 
@@ -44,6 +45,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:inputType="number"
+            android:background="@drawable/text_bg"
             android:hint="请输入验证码"/>
         <Button
             android:id="@+id/btn_getAuthCode"

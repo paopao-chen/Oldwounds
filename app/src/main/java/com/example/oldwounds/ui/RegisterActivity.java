@@ -2,10 +2,13 @@ package com.example.oldwounds.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -24,6 +27,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.oldwounds.R;
+import com.example.oldwounds.domain.User;
 import com.example.oldwounds.utils.LogUtil;
 import com.example.oldwounds.utils.StaticData;
 import com.example.oldwounds.utils.TimeCount;
@@ -32,17 +36,20 @@ import com.example.oldwounds.utils.ToastUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText et_phone;
-    EditText et_psw;
-    EditText et_ackPsw;
-    EditText et_authCode;
-    Button btn_getAuthCode;
-    Button btn_register;
+    private static final String TAG = RegisterActivity.class.getSimpleName();
+    private EditText et_phone;
+    private EditText et_psw;
+    private EditText et_ackPsw;
+    private EditText et_authCode;
+    private Button btn_getAuthCode;
+    private Button btn_register;
+    private boolean isRegister;
 
     private TimeCount mTimeCount;//计时器
 
@@ -65,45 +72,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //设置监听事件
         btn_getAuthCode.setOnClickListener(this);
         btn_register.setOnClickListener(this);
-        mTimeCount = new TimeCount(60000, 1000,btn_getAuthCode);
+        mTimeCount = new TimeCount(60000, 1000, btn_getAuthCode);
     }
 
     @Override
     public void onClick(View v) {
-        String phone = et_phone.getText().toString();
+        final String phone = et_phone.getText().toString();
         switch (v.getId()) {
             case R.id.btn_getAuthCode:
                 /**
                  * 检验手机号是否正确（正则表达式）
                  * 调用定时器定时改变
                  */
-                /*Pattern pattern = Pattern.compile(StaticData.REGEX);
-                Matcher matcher = pattern.matcher(et_phone.getText());
-                if (!matcher.matches()) {
-                    Toast.makeText(this,"输入的电话号码错误,请重新输入",Toast.LENGTH_SHORT).show();
-                } else {
-                    //通过okhttp发出网络请求
-
-                    Request request = new Request.Builder()
-                            .url(StaticData.NOTE_URL)
-                            .post()
-                            .build();
-
-                    OkHttpClient client = new OkHttpClient();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-                        }
-                    });
-                    //开启计时器
-                    mTimeCount.start();
-                }*/
                 Pattern pattern = Pattern.compile(StaticData.REGEX);
                 Matcher matcher = pattern.matcher(phone);
                 if (!matcher.matches()) {
@@ -138,33 +118,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     ToastUtil.showShort(this,"请输入密码");
                 } else if (TextUtils.isEmpty(et_ackPsw.getText()) || ! et_psw.getText().toString().equals(et_ackPsw.getText().toString())) {
                     ToastUtil.showShort(this,"两次输入的密码不一样");
-                }/* else if("用户名已存在") {
-
-
-                }*/
-                else {
+                } else if (isRegister(et_phone.getText().toString())){
+                    ToastUtil.showShort(this, "用户名已存在");
+                } else {
                     //检验验证码
                     BmobSMS.verifySmsCode(phone, et_authCode.getText().toString(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
-                                /*mTvInfo.append("验证码验证成功，您可以在此时进行绑定操作！\n");
-                                //验证码验证成功，可以在此时进行绑定操作
-                                User user = BmobUser.getCurrentUser(User.class);
+                                User user = new User();
+                                user.setUsername(phone);
+                                user.setPassword(et_psw.getText().toString());
                                 user.setMobilePhoneNumber(phone);
                                 user.setMobilePhoneNumberVerified(true);
-                                user.update(new UpdateListener() {
+                                user.signUp(new SaveListener<User>() {
                                     @Override
-                                    public void done(BmobException e) {
+                                    public void done(User user, BmobException e) {
                                         if (e == null) {
-                                            mTvInfo.append("绑定手机号码成功");
+                                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                            ToastUtil.showShort(getApplicationContext(),"注册成功");
                                         } else {
-                                            mTvInfo.append("绑定手机号码失败：" + e.getErrorCode() + "-" + e.getMessage());
+                                            Log.e(TAG, "singUp: ", e);
                                         }
                                     }
-                                });*/
-                                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-                                ToastUtil.showShort(getApplicationContext(),"注册成功");
+                                });
                             } else {
                                 ToastUtil.showShort(RegisterActivity.this,"验证码验证失败");
                             }
@@ -175,5 +152,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             default:
                 break;
         }
+    }
+
+    private boolean isRegister(String userName) {
+        BmobQuery<User> query = new BmobQuery<>();
+        query.addWhereEqualTo("username", userName);
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if (e == null) {
+                    isRegister = true;
+                } else {
+                    isRegister = false;
+                }
+            }
+        });
+        return isRegister;
     }
 }

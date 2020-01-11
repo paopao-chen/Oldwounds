@@ -262,7 +262,7 @@ public class UseTimeDataManager {
             startTime = DateTransUtils.getZeroClockTimeStamp(endTime);
         }else {
             //00:00:00 ------> 23:59:59
-            endTime = DateTransUtils.getZeroClockTimeStamp(System.currentTimeMillis() - (dayNumber-1) * DateTransUtils.DAY_IN_MILLIS ) - 1;
+            endTime = DateTransUtils.getZeroClockTimeStamp(System.currentTimeMillis() - (dayNumber-1) * DateTransUtils.DAY_IN_MILLIS) - 1;
             startTime = endTime - DateTransUtils.DAY_IN_MILLIS + 1;
         }
         LogUtil.e(TAG,"getEventList");

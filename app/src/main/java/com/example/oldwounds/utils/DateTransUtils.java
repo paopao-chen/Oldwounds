@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class DateTransUtils {
 
-    private String TAG = this.getClass().getName();
+    private static final String TAG = DateTransUtils.class.getSimpleName();
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static final long DAY_IN_MILLIS = 24 * 60 * 60 * 1000;

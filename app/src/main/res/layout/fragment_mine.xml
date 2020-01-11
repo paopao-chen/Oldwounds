@@ -48,10 +48,11 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/tv_alter"
+                android:id="@+id/tv_setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="修改个人信息"
+                android:layout_marginTop="15dp"
+                android:text="切换夜间模式"
                 android:textSize="20sp" />
 
             <View
@@ -62,11 +63,11 @@
                 android:background="@color/colorPrimary" />
 
             <TextView
-                android:id="@+id/tv_setting"
+                android:id="@+id/tv_alter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="设置"
+                android:text="修改个人信息"
                 android:textSize="20sp" />
 
             <View

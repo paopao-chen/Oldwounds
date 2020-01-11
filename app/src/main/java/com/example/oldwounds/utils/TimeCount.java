@@ -19,7 +19,7 @@ public class TimeCount extends CountDownTimer {
      * @param countDownInterval The interval along the way to receive
      *                          {@link #onTick(long)} callbacks.
      */
-    public TimeCount(long millisInFuture, long countDownInterval,Button button) {
+    public TimeCount(long millisInFuture, long countDownInterval, Button button) {
         super(millisInFuture, countDownInterval);
         this.button = button;
     }
