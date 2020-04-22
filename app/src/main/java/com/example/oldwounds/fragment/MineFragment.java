@@ -1,9 +1,9 @@
 package com.example.oldwounds.fragment;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,21 +20,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.oldwounds.MainActivity;
 import com.example.oldwounds.R;
-import com.example.oldwounds.ui.AboutActivity;
-import com.example.oldwounds.ui.LoginActivity;
+import com.example.oldwounds.activity.FAQActivity;
+import com.example.oldwounds.application.BaseApplication;
+import com.example.oldwounds.activity.AboutActivity;
+import com.example.oldwounds.activity.LoginActivity;
 import com.example.oldwounds.utils.LogUtil;
 import com.example.oldwounds.utils.SharedPreferencesUtil;
+import com.example.oldwounds.utils.StaticData;
+import com.example.oldwounds.utils.ToastUtil;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,11 +48,14 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -54,12 +63,14 @@ import static android.app.Activity.RESULT_OK;
  * Create by Politness Chen on 2019/10/16--14:05
  * desc:   个人界面Fragment
  */
-public class MineFragment extends Fragment implements View.OnClickListener {
+public class MineFragment extends Fragment implements View.OnClickListener{
 
     private static MineFragment mineFragment;
-    public MineFragment(){}
 
-    public static Fragment getInstance(){
+    public MineFragment() {
+    }
+
+    public static Fragment getInstance() {
         if (mineFragment == null)
             mineFragment = new MineFragment();
         return mineFragment;
@@ -69,36 +80,48 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private CircleImageView profile_image;
     private TextView user_id;
     private TextView user_name;
-    private TextView tv_alter;
-    private TextView tv_setting;
-    private TextView tv_about;
     private TextView tv_version;
-
+    private FrameLayout fl_about;
+    private FrameLayout fl_update_info;
+    private FrameLayout fl_faq;
+    private FrameLayout fl_update_version;
     private PopupWindow popupWindow;
+
+    private static final int UPDATE_VERSION = 1;
+
+    private String mVersionName;
+    private int mVersionCode;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mine,container,false);
+        View view = inflater.inflate(R.layout.fragment_mine, container, false);
 
         findView(view);
+        initView();
         return view;
     }
 
     private void findView(View view) {
         btn_exit = (Button) view.findViewById(R.id.btn_exit);
-        btn_exit.setOnClickListener(this);
         profile_image = (CircleImageView) view.findViewById(R.id.profile_image);
         user_id = (TextView) view.findViewById(R.id.user_id);
         user_name = (TextView) view.findViewById(R.id.user_name);
-        tv_alter = (TextView) view.findViewById(R.id.tv_alter);
-        tv_setting = (TextView) view.findViewById(R.id.tv_setting);
-        tv_about = (TextView) view.findViewById(R.id.tv_about);
         tv_version = (TextView) view.findViewById(R.id.tv_version);
+        fl_about = (FrameLayout) view.findViewById(R.id.fl_about);
+        fl_update_info = (FrameLayout) view.findViewById(R.id.fl_update_info);
+        fl_update_version = (FrameLayout) view.findViewById(R.id.fl_update_version);
+        fl_faq = (FrameLayout) view.findViewById(R.id.fl_faq);
 
+        btn_exit.setOnClickListener(this);
         profile_image.setOnClickListener(this);
-        tv_about.setOnClickListener(this);
+        fl_about.setOnClickListener(this);
+        fl_update_version.setOnClickListener(this);
+        fl_faq.setOnClickListener(this);
+    }
 
+    private void initView() {
+        tv_version.setText(getVersionInfo());
     }
 
     @Override
@@ -106,7 +129,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_exit:
                 //修改登录状态为false
-                SharedPreferencesUtil.putBoolean(getActivity(),"isLogin",false);
+                SharedPreferencesUtil.putBoolean(getActivity(), "isLogin", false);
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
                 break;
@@ -128,11 +151,17 @@ public class MineFragment extends Fragment implements View.OnClickListener {
             case R.id.tv_cancel:
                 popupWindow.dismiss();
                 break;
-            case R.id.tv_about:
+            case R.id.fl_about:
                 startActivity(new Intent(getActivity(), AboutActivity.class));
                 break;
-                default:
-                    break;
+            case R.id.fl_update_version:
+                updateVersion();
+                break;
+            case R.id.fl_faq:
+                startActivity(new Intent(getActivity(), FAQActivity.class));
+                break;
+            default:
+                break;
         }
     }
 
@@ -145,7 +174,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private Uri mCutUri;// 图片裁剪时返回的uri
 
     private void openCamera() {
-        File outputImage = new File(getActivity().getExternalCacheDir(),IMAGE_FILE_NAME);
+        File outputImage = new File(getActivity().getExternalCacheDir(), IMAGE_FILE_NAME);
         try {
             if (outputImage.exists()) {
                 outputImage.delete();
@@ -157,13 +186,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         /*Uri imageUri;*/
         //在7.0版本中必须要这样实现，否则会报exposed beyond app through ClipData.Item.getUri()错误
         if (Build.VERSION.SDK_INT >= 24) {
-            imageUri = FileProvider.getUriForFile(getActivity(),"com.example.camera.fileprovider",outputImage);
+            imageUri = FileProvider.getUriForFile(getActivity(), "com.example.camera.fileprovider", outputImage);
         } else {
             imageUri = Uri.fromFile(outputImage);
         }
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent,TAKE_PHOTO);
+        startActivityForResult(intent, TAKE_PHOTO);
     }
 
     private void openPicture() {
@@ -172,7 +201,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         intent.setType("image/*");*/
         Intent intent = new Intent(Intent.ACTION_PICK, null);
         intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intent,CHOOSE_PHOTO);
+        startActivityForResult(intent, CHOOSE_PHOTO);
     }
 
     @Override
@@ -201,13 +230,13 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     }
 
     //调用系统的图片裁剪
-    private void cropPhoto(Uri uri,boolean fromCamera) {
+    private void cropPhoto(Uri uri, boolean fromCamera) {
         if (uri == null) {
-            Log.e("MineFragment","uri == null");
+            Log.e("MineFragment", "uri == null");
         }
         Intent intent = new Intent("com.android.camera.action.CROP");
 
-        intent.setDataAndType(uri,"image/*");
+        intent.setDataAndType(uri, "image/*");
         //设置裁剪
         intent.putExtra("scale", "true");
         //裁剪宽高比例
@@ -253,7 +282,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         Intent intentBc = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         intentBc.setData(uri);
         getActivity().sendBroadcast(intentBc);
-        startActivityForResult(intent,REQUEST_CROP);
+        startActivityForResult(intent, REQUEST_CROP);
     }
 
     private void openPopupWindow(View v) {
@@ -299,4 +328,80 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         getActivity().getWindow().setAttributes(lp);
     }
 
+    private void updateVersion() {
+        final Request request = new Request.Builder().url(StaticData.MY_URL + "/version.json").build();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                client.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        ToastUtil.showShort("请求失败，请稍后重试");
+                    }
+
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        mHandler.obtainMessage(UPDATE_VERSION, response.body().string()).sendToTarget();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    //获取版本号
+    private String getVersionInfo() {
+        PackageManager packageManager = BaseApplication.getContext().getPackageManager();
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(BaseApplication.getContext().getPackageName(), 0);
+            mVersionName = packageInfo.versionName;
+            mVersionCode = packageInfo.versionCode;
+            return "当前版本: " + mVersionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            return "无法获取版本号";
+        }
+    }
+
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            switch (msg.what) {
+                case UPDATE_VERSION:
+                    try {
+                        JSONObject jsonObject = new JSONObject((String) msg.obj);
+                        String versionName = jsonObject.getString("versionName");
+                        int versionCode = jsonObject.getInt("versionCode");
+                        String updateTime = jsonObject.getString("updateTime");
+                        String url = jsonObject.getString("url");
+                        Log.e("chenbin", "updateVersion----> versionName: " + versionName +" versionCode: " + versionCode
+                                + " updateTime: " + updateTime + " url: " + url);
+                        if (versionCode == mVersionCode) {
+                            ToastUtil.showShort("已是最新版本.");
+                        } else {
+                            new AlertDialog.Builder(BaseApplication.getContext())
+                                    .setTitle("有新版本啦!")
+                                    .setMessage("修复已知bug") // 在服务器的json中加入一个content
+                                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    })
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    });
 }

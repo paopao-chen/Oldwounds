@@ -1,4 +1,4 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,9 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.oldwounds.MainActivity;
 import com.example.oldwounds.R;
@@ -54,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);   //照片要一个大的，或者自己写一个view
         hideBootomUIMeun();
-        handler.sendEmptyMessageDelayed(TOMAIN,2000L);
+        handler.sendEmptyMessageDelayed(TOMAIN,1000L);
     }
 
     /**
@@ -66,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
     }
+
     //禁止返回
     @Override
     public void onBackPressed() {

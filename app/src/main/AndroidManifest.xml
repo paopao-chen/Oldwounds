@@ -16,7 +16,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".Application.MyApplication"
+        android:name=".application.BaseApplication"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -25,30 +25,28 @@
         tools:ignore="GoogleAppIndexingWarning"
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="n">
-        <activity android:name=".ui.AddTodoActivity"/>
+
         <activity
-            android:name=".ui.UseTimeDetailActivity"
-            android:label="应用使用详情" />
-        <activity
-            android:name=".ui.AboutActivity"
-            android:label="关于" />
-        <activity android:name=".ui.ForgetActivity" />
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.RegisterActivity" />
-        <activity
-            android:name=".ui.SplashActivity"
-            android:background="@drawable/splash"
-            android:theme="@style/NoActivityFullScreen">
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/ToolTheme" />
+        <activity android:name=".MainActivity" android:theme="@style/ToolTheme" />
+        <activity android:name=".activity.AddTodoActivity"/>
+        <activity android:name=".activity.UseTimeDetailActivity" android:label="应用使用详情" />
+        <activity android:name=".activity.AboutActivity" android:label="关于" />
+        <activity android:name=".activity.ForgetActivity" />
+        <activity android:name=".activity.LoginActivity" android:launchMode="singleTask"/>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.FAQActivity" android:label="常见问题" />
 
+        <!--Boomb的内容提供者-->
+        <provider
+            android:name="cn.bmob.v3.util.BmobContentProvider"
+            android:authorities="com.example.oldwounds.BmobContentProvider"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.camera.fileprovider"
@@ -57,11 +55,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
-        </provider>
-        <!--Boomb的内容提供者-->
-        <provider
-            android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.example.oldwounds.BmobContentProvider">
         </provider>
     </application>
 

@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,15 +46,18 @@ import okhttp3.Response;
  */
 public class HomeFragment extends Fragment {
     private static HomeFragment homeFragment;
-    public HomeFragment(){}
 
-    public static Fragment getInstance(){
+    public HomeFragment() {
+    }
+
+    public static Fragment getInstance() {
         if (homeFragment == null)
             homeFragment = new HomeFragment();
         return homeFragment;
     }
 
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private Toolbar toolbar_home;
     private ImageView todayImage;
     private TextView todayWord;
     private TextView imageAuthor;
@@ -61,7 +65,10 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        toolbar_home = view.findViewById(R.id.toolbar_home);
+        toolbar_home.setTitle("愿你我都能成为更好的自己.");
+        toolbar_home.setTitleMarginStart(20);
         initView(view);
         Log.e(TAG, "onCreateView: 11111");
         loadContent();

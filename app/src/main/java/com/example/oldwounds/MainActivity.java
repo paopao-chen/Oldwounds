@@ -21,6 +21,7 @@ import com.example.oldwounds.fragment.MineFragment;
 import com.example.oldwounds.fragment.HomeFragment;
 import com.example.oldwounds.fragment.TodoFragment;
 import com.example.oldwounds.utils.MyViewPager;
+import com.example.oldwounds.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,8 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // 检查是否有存储和拍照权限
             if (ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-            ) {
+                    && ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 hasPermission = true;
             } else {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_PERMISSION);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
         if (mExitTime + TIME_EXIT > System.currentTimeMillis()) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this,R.string.EXIT_TIME,Toast.LENGTH_SHORT).show();
+            ToastUtil.showShort(getResources().getString(R.string.EXIT_TIME));
             mExitTime = System.currentTimeMillis();
         }
 

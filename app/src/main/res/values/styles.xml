@@ -14,8 +14,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--解决APP首次启动白屏或黑屏的bug的样式-->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- 全屏主题风格 -->
+    <style name="NoActivityFullScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+<!--        <item name="android:background">@drawable/splash</item>-->
+    </style>
+
+    <!-- 弹窗动画 -->
+    <style name="popupWindow">
+        <item name="android:windowEnterAnimation">@anim/window_in</item>
+        <item name="android:windowExitAnimation">@anim/window_out</item>
+    </style>
+
     <style name="Custom"/>
-    <!--    自定义控件风格-->
+    <!-- 自定义控件风格 -->
     <style name="Custom.TabRadioButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:gravity">center</item>
@@ -26,20 +48,4 @@
         <item name="android:button">@null</item>
         <item name="android:textColor">@color/tab_text_color_selector</item>
     </style>
-
-    <!--    全屏主题风格-->
-    <style name="NoActivityFullScreen" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-<!--        <item name="android:background">@drawable/splash</item>-->
-    </style>
-
-    <!--    弹窗动画-->
-    <style name="popupWindow">
-        <item name="android:windowEnterAnimation">@anim/window_in</item>
-        <item name="android:windowExitAnimation">@anim/window_out</item>
-    </style>
-
 </resources>

@@ -1,10 +1,8 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.os.Bundle;
-import android.view.CollapsibleActionView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;

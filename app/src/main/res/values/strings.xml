@@ -1,8 +1,14 @@
 <resources>
-    <string name="app_name">旧痕</string>
+    <string name="app_name">时之沙</string>
     <string name="home">主页</string>
     <string name="old">旧痕</string>
     <string name="todo">目标</string>
     <string name="mine">个人</string>
-    <string name="EXIT_TIME">再点击退出旧痕</string>
+    <string name="EXIT_TIME">再次点击返回退出应用</string>
+    <string name="dark_mode">夜间模式</string>
+    <string name="edit_info">修改个人信息</string>
+    <string name="abort_software">关于软件</string>
+    <string name="common_problem">常见问题</string>
+    <string name="update_version">版本更新</string>
+    <string name="exit_app">退出登录</string>
 </resources>

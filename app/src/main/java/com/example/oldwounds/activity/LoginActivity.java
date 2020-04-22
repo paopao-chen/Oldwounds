@@ -1,10 +1,9 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -67,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 final String userName = et_userName.getText().toString().trim();
                 String psw = et_psw.getText().toString().trim();
                 if (TextUtils.isEmpty(userName) || TextUtils.isEmpty(psw)) {
-                    ToastUtil.showShort(this,"用户名或密码为空");
+                    ToastUtil.showShort("用户名或密码为空");
                 } else {
                     User user = new User();
                     user.setUsername(userName);
@@ -76,14 +75,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void done(Object o, BmobException e) {
                             if (e == null) {
-                                SharedPreferences.Editor editor = getSharedPreferences("login",MODE_PRIVATE).edit();
-                                editor.putString("userName",userName);
-                                editor.putBoolean("isLogin",true);
+                                SharedPreferences.Editor editor = getSharedPreferences("login", MODE_PRIVATE).edit();
+                                editor.putString("userName", userName);
+                                editor.putBoolean("isLogin", true);
                                 editor.apply();
+                                // 直接用sp记录一下userName等信息，其他地方从本地获取数据即可
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();
                             } else {
-                                ToastUtil.showShort(getApplicationContext(), "用户名或密码错误");
+                                ToastUtil.showShort("用户名或密码错误");
                             }
                         }
                     });

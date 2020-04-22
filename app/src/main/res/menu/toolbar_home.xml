@@ -9,14 +9,8 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/item_content"
-        android:icon="@mipmap/content_icon"
-        android:title="Content"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/item_setting"
         android:icon="@mipmap/settings_icon"
         android:title="Setting"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>

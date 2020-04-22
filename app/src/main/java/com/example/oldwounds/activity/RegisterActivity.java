@@ -1,21 +1,14 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.oldwounds.R;
 import com.example.oldwounds.domain.User;
@@ -33,9 +25,6 @@ import com.example.oldwounds.utils.StaticData;
 import com.example.oldwounds.utils.TimeCount;
 import com.example.oldwounds.utils.ToastUtil;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Matcher matcher = pattern.matcher(phone);
                 if (!matcher.matches()) {
 //                    Toast.makeText(this,"输入的电话号码错误,请重新输入",Toast.LENGTH_SHORT).show();
-                    ToastUtil.showShort(this,"输入的电话号码错误,请重新输入");
+                    ToastUtil.showShort("输入的电话号码错误,请重新输入");
                 } else {
                     BmobSMS.requestSMSCode(phone, "demo", new QueryListener<Integer>() {
                         @Override
@@ -113,13 +102,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                  * 跳转到登录界面
                  */
                 if (TextUtils.isEmpty(et_phone.getText())) {
-                    ToastUtil.showShort(this,"请输入手机号码");
+                    ToastUtil.showShort("请输入手机号码");
                 } else if (TextUtils.isEmpty(et_psw.getText())) {
-                    ToastUtil.showShort(this,"请输入密码");
+                    ToastUtil.showShort("请输入密码");
                 } else if (TextUtils.isEmpty(et_ackPsw.getText()) || ! et_psw.getText().toString().equals(et_ackPsw.getText().toString())) {
-                    ToastUtil.showShort(this,"两次输入的密码不一样");
+                    ToastUtil.showShort("两次输入的密码不一样");
                 } else if (isRegister(et_phone.getText().toString())){
-                    ToastUtil.showShort(this, "用户名已存在");
+                    ToastUtil.showShort("用户名已存在");
                 } else {
                     //检验验证码
                     BmobSMS.verifySmsCode(phone, et_authCode.getText().toString(), new UpdateListener() {
@@ -136,14 +125,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     public void done(User user, BmobException e) {
                                         if (e == null) {
                                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                            ToastUtil.showShort(getApplicationContext(),"注册成功");
+                                            ToastUtil.showShort("注册成功");
                                         } else {
                                             Log.e(TAG, "singUp: ", e);
                                         }
                                     }
                                 });
                             } else {
-                                ToastUtil.showShort(RegisterActivity.this,"验证码验证失败");
+                                ToastUtil.showShort("验证码验证失败");
                             }
                         }
                     });

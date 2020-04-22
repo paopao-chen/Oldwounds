@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#FCD335</color>
+    <color name="colorPrimaryDark">#FCD335</color> <!--状态栏颜色-->
     <color name="colorAccent">#D81B60</color>
 
     <color name="blue">#1296db</color>
     <color name="black">#2c2c2c</color>
+    <color name="switch_track_off">#5f6368</color>
+    <color name="switch_track_on">#00f2fe</color>
+    <color name="divider">#1f000000</color>
 </resources>

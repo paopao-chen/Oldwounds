@@ -11,7 +11,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/button_bg"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -20,7 +20,7 @@
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:src="@mipmap/profile"
-                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_color="@color/blue"
                 app:civ_border_width="2dp" />
 
             <TextView
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="ID:"
+                android:text="ID:00001"
                 android:textSize="18sp" />
 
             <TextView
@@ -36,77 +36,133 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="昵称:"
+                android:text="昵称:陈泡泡_"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:id="@+id/tv_setting"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="切换夜间模式"
-                android:textSize="20sp" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:text="@string/dark_mode"
+                    android:gravity="center_vertical"/>
+                <Switch
+                    android:id="@+id/switch_dark_mode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:thumb="@drawable/selector_switch_thumb"
+                    android:track="@drawable/selector_switch_track"/>
+            </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:alpha="0.5"
-                android:background="@color/colorPrimary" />
+            <include layout="@layout/view_divider" />
 
-            <TextView
-                android:id="@+id/tv_alter"
+            <FrameLayout
+                android:id="@+id/fl_update_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="修改个人信息"
-                android:textSize="20sp" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:text="@string/edit_info"
+                    android:gravity="center_vertical"/>
+            </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:alpha="0.5"
-                android:background="@color/colorPrimary" />
+            <include layout="@layout/view_divider" />
 
-            <TextView
-                android:id="@+id/tv_about"
+            <FrameLayout
+                android:id="@+id/fl_about"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="关于旧痕"
-                android:textSize="20sp" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:text="@string/abort_software"
+                    android:gravity="center_vertical"/>
+            </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:alpha="0.5"
-                android:background="@color/colorPrimary" />
+            <include layout="@layout/view_divider" />
 
-            <TextView
-                android:id="@+id/tv_version"
+            <FrameLayout
+                android:id="@+id/fl_faq"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="版本更新"
-                android:textSize="20sp" />
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:text="@string/common_problem"
+                    android:gravity="center_vertical"/>
+            </FrameLayout>
+
+            <include layout="@layout/view_divider" />
+
+            <FrameLayout
+                android:id="@+id/fl_update_version"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:focusable="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="18sp"
+                    android:text="@string/update_version"
+                    android:gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:layout_gravity="end"
+                    android:gravity="center_vertical"/>
+            </FrameLayout>
 
             <Button
                 android:id="@+id/btn_exit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:background="@color/colorAccent"
-                android:text="退出登录" />
+                android:background="#ff4e50"
+                android:text="@string/exit_app" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,13 +1,11 @@
 package com.example.oldwounds.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,15 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.oldwounds.R;
 import com.example.oldwounds.domain.Todo;
-import com.example.oldwounds.ui.AddTodoActivity;
+import com.example.oldwounds.activity.AddTodoActivity;
 import com.example.oldwounds.utils.DateTransUtils;
 import com.example.oldwounds.utils.LogUtil;
 import com.example.oldwounds.utils.StaticData;
@@ -31,18 +27,13 @@ import com.example.oldwounds.utils.TodoDataUtil;
 import com.example.oldwounds.view.EmptyRecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.ViewUtils;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,9 +47,11 @@ import static android.app.Activity.RESULT_CANCELED;
 public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickListener,
         DatePickerDialog.OnDateSetListener, View.OnClickListener {
     private static TodoFragment todoFragment;
-    public TodoFragment(){}
 
-    public static Fragment getInstance(){
+    public TodoFragment() {
+    }
+
+    public static Fragment getInstance() {
         if (todoFragment == null)
             todoFragment = new TodoFragment();
         return todoFragment;
@@ -83,7 +76,7 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_todo,container,false);
+        View view = inflater.inflate(R.layout.fragment_todo, container, false);
 
         initView(view);
         return view;
@@ -137,8 +130,8 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         switch (v.getId()) {
             case R.id.fab_add_task:
                 Intent intent = new Intent(getActivity(), AddTodoActivity.class);
-                Todo todo = new Todo("",false);
-                intent.putExtra(StaticData.TODOITEM,todo);
+                Todo todo = new Todo("", false);
+                intent.putExtra(StaticData.TODOITEM, todo);
                 startActivityForResult(intent, StaticData.REQUEST_ID_TODO_ITEM);
                 break;
             default:
@@ -183,7 +176,7 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item_layout,parent,false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item_layout, parent, false);
             final ViewHolder viewHolder = new ViewHolder(view);
             viewHolder.cb_todo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,9 +200,9 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
                 @Override
                 public void onClick(View v) {
                     Todo todo = mList.get(viewHolder.getAdapterPosition());
-                    Intent intent =new Intent(getContext(), AddTodoActivity.class);
+                    Intent intent = new Intent(getContext(), AddTodoActivity.class);
                     intent.putExtra(StaticData.TODOITEM, todo);
-                    startActivityForResult(intent,StaticData.REQUEST_ID_TODO_ITEM);
+                    startActivityForResult(intent, StaticData.REQUEST_ID_TODO_ITEM);
                 }
             });
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -250,13 +243,13 @@ public class TodoFragment extends Fragment implements Toolbar.OnMenuItemClickLis
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.toolbar_todo,menu);
+        inflater.inflate(R.menu.toolbar_todo, menu);
 //        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        todo_toolbar.setTitle(year + "年" + (month+1) + "月" + dayOfMonth + "日");
+        todo_toolbar.setTitle(year + "年" + (month + 1) + "月" + dayOfMonth + "日");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

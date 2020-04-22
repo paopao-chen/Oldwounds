@@ -1,6 +1,5 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Adapter;
 
 import com.example.oldwounds.R;
 import com.example.oldwounds.adapter.UseTimeDetailAdapter;

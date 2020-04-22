@@ -1,4 +1,4 @@
-package com.example.oldwounds.ui;
+package com.example.oldwounds.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
